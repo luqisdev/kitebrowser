@@ -1,11 +1,12 @@
-# 🌐 LowBrowser
+# 🪁 Kite
 
-**Ultra-Lightweight, Smart Memory-Managed Custom Web Browser**
+**Ultra-Lightweight, Aerodynamic & Smart Memory-Managed Web Browser**
 
-LowBrowser is an ultra-fast, modern web browser engineered for gamers, power users, and low-resource environments.
+Kite is an ultra-fast, modern web browser engineered for gamers, power users, and low-resource environments.
 
 ## 🚀 Key Features
 
+- **In-Tab Settings:** Native browser architecture with `kite://settings` routing and instant search.
 - **Split Screen:** Browse two websites side-by-side.
 - **Vertical Tabs:** Modern left-docked vertical tab bar.
 - **Utility Sidebar:** Built-in Google Translator, Calculator, and Quick Notes.
@@ -15,8 +16,8 @@ LowBrowser is an ultra-fast, modern web browser engineered for gamers, power use
 
 ## 📥 Download
 
-- **Windows Desktop:** [Download Latest Setup (.exe)](https://github.com/billythestudent/lowbrowser/releases/latest)
-- **Android Mobile:** [Download Latest APK (.apk)](https://github.com/billythestudent/lowbrowser/releases/download/mobile-latest/LowBrowser.apk)
+- **Windows Desktop:** [Download Latest Setup (Kite-Setup.exe)](https://github.com/billythestudent/lowbrowser/releases/latest)
+- **Android Mobile:** [Download Latest APK (.apk)](https://github.com/billythestudent/lowbrowser/releases/download/mobile-latest/Kite.apk)
 
 ---
 *Developed with ❤️ by [billythestudent](https://github.com/billythestudent)*
