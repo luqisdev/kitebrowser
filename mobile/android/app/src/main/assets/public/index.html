@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>LowBrowser Mobile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-amoled">
+
+  <!-- ==========================================
+       1. TOP MOBILE HEADER & OMNIBOX
+       ========================================== -->
+  <header id="mobile-header">
+    <div id="omnibox-wrapper">
+      <div id="ssl-badge">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z" fill="currentColor"/></svg>
+      </div>
+      <input type="text" id="mobile-address-input" placeholder="Arama yapın veya adres girin..." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="go">
+      <button id="btn-clear-omnibox" class="omnibox-action-btn hidden" title="Temizle">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
+      </button>
+      <button id="btn-bookmark-current" class="omnibox-action-btn" title="Yer İmlerine Ekle">
+        <svg class="icon star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+      </button>
+      <button id="btn-reload-page" class="omnibox-action-btn" title="Yenile">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" fill="currentColor"/></svg>
+      </button>
+      <button id="btn-top-settings" class="omnibox-action-btn" title="Ayarlar">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/></svg>
+      </button>
+    </div>
+
+    <!-- Progress loading bar -->
+    <div id="mobile-progress-bar"></div>
+
+    <!-- Live Google Autocomplete Suggestions Dropdown -->
+    <div id="mobile-suggestions" class="hidden"></div>
+
+    <!-- Live Find in Page Floating Bar -->
+    <div id="mobile-find-bar" class="hidden">
+      <div class="find-input-wrap">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+        <input type="text" id="mobile-find-input" placeholder="Sayfada bul...">
+        <span id="mobile-find-count">0/0</span>
+      </div>
+      <div class="find-actions">
+        <button id="btn-find-prev" class="find-btn" title="Önceki">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" fill="currentColor"/></svg>
+        </button>
+        <button id="btn-find-next" class="find-btn" title="Sonraki">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" fill="currentColor"/></svg>
+        </button>
+        <button id="btn-find-close" class="find-btn" title="Kapat">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       2. MAIN CONTENT & START PAGE
+       ========================================== -->
+  <main id="mobile-main">
+    
+    <!-- START / NEW TAB PAGE -->
+    <div id="mobile-start-page">
+      <div class="start-logo-wrap">
+        <img src="logo.png" alt="LowBrowser Mobile" id="mobile-logo">
+        <h2>LowBrowser</h2>
+        <span class="version-tag">Mobile Edition</span>
+      </div>
+
+      <!-- Quick Search Box on Start Page -->
+      <div id="start-search-box">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+        <input type="text" id="start-search-input" placeholder="Arama yapın veya adres girin...">
+      </div>
+
+      <!-- Quick Tab Creation Action Pills on Start Page -->
+      <div id="start-tab-actions">
+        <button id="btn-start-new-tab" class="start-action-pill">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/></svg>
+          <span>Yeni Sekme</span>
+        </button>
+        <button id="btn-start-new-private" class="start-action-pill private-pill">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5zm2.07-7.75l-.9.92C11.45 11.9 11 12.5 11 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" fill="currentColor"/></svg>
+          <span>Gizli Sekme</span>
+        </button>
+      </div>
+
+      <!-- Mobile Speed Dials Grid -->
+      <div class="section-title">Hızlı Erişim</div>
+      <div id="mobile-speed-dials"></div>
+
+      <!-- Mobile Security & Performance Status Banner -->
+      <div id="mobile-shield-banner">
+        <div class="shield-badge">
+          <svg class="icon" style="width: 16px; height: 16px; color: #a855f7;" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z" fill="currentColor"/></svg>
+          <span>Mobil Güvenlik & Donanım Koruyucu</span>
+        </div>
+        <div class="shield-stats">
+          <span>Engellenen: <strong id="stat-ads-count">0</strong> reklam</span>
+          <span>Tasarruf: <strong id="stat-saved-data">0.0 MB</strong> bellek</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Views Container -->
+    <div id="mobile-views-container"></div>
+  </main>
+
+  <!-- ==========================================
+       3. CHROME-STYLE TAB GRID SWITCHER MODAL
+       ========================================== -->
+  <div id="tab-switcher-modal" class="hidden">
+    <div class="tab-switcher-header">
+      <div class="tab-switcher-actions">
+        <button id="btn-new-tab-modal" class="btn-modal-pill">
+          <svg class="icon" style="width: 14px; height: 14px; margin-right: 4px;" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/></svg>
+          <span>Normal Sekme</span>
+        </button>
+        <button id="btn-new-private-modal" class="btn-modal-pill private-pill">
+          <svg class="icon" style="width: 14px; height: 14px; margin-right: 4px;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5zm2.07-7.75l-.9.92C11.45 11.9 11 12.5 11 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" fill="currentColor"/></svg>
+          <span>Gizli Sekme</span>
+        </button>
+      </div>
+      <button id="btn-close-tab-switcher" class="btn-done">Bitti</button>
+    </div>
+
+    <!-- Cards Grid -->
+    <div id="tab-cards-grid"></div>
+  </div>
+
+  <!-- ==========================================
+       4. MOBILE ACTION MENU (Bottom Sheet)
+       ========================================== -->
+  <div id="menu-overlay" class="hidden">
+    <div id="menu-sheet">
+      <div class="sheet-header">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title-row">
+          <span class="sheet-title">Menü & Hızlı Araçlar</span>
+          <button id="btn-close-menu-sheet" class="sheet-close-btn" title="Kapat">✕</button>
+        </div>
+      </div>
+      
+      <div class="sheet-scroll-body">
+        <div class="menu-items-grid">
+          <button class="sheet-item" id="menu-btn-newtab">
+            <div class="sheet-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/></svg>
+            </div>
+            <span>Yeni Sekme</span>
+          </button>
+          <button class="sheet-item" id="menu-btn-private">
+            <div class="sheet-icon">
+              <svg class="icon" style="color: #ec4899;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5zm2.07-7.75l-.9.92C11.45 11.9 11 12.5 11 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z" fill="currentColor"/></svg>
+            </div>
+            <span>Gizli Sekme</span>
+          </button>
+          <button class="sheet-item" id="menu-btn-bookmarks">
+            <div class="sheet-icon">
+              <svg class="icon" style="color: #fbbf24;" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            </div>
+            <span>Yer İmleri</span>
+          </button>
+          <button class="sheet-item" id="menu-btn-history">
+            <div class="sheet-icon">
+              <svg class="icon" style="color: #38bdf8;" viewBox="0 0 24 24"><path d="M13 3a9 9 0 00-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z" fill="currentColor"/></svg>
+            </div>
+            <span>Geçmiş</span>
+          </button>
+          <button class="sheet-item" id="menu-btn-downloads">
+            <div class="sheet-icon">
+              <svg class="icon" style="color: #10b981;" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" fill="currentColor"/></svg>
+            </div>
+            <span>İndirilenler</span>
+          </button>
+          <button class="sheet-item" id="menu-btn-find">
+            <div class="sheet-icon">
+              <svg class="icon" style="color: #f59e0b;" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+            </div>
+            <span>Sayfada Bul</span>
+          </button>
+        </div>
+
+        <div class="sheet-divider"></div>
+
+      <div class="sheet-list">
+        <!-- Adblock -->
+        <div class="sheet-list-item" id="toggle-adblock-item">
+          <div class="item-left">
+            <div class="item-icon-box">
+              <svg class="icon" style="color: #a855f7;" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z" fill="currentColor"/></svg>
+            </div>
+            <div>
+              <div class="item-title">Reklam Engelleyici</div>
+              <div class="item-desc">Mobil reklamları ve izleyicileri filtrele</div>
+            </div>
+          </div>
+          <label class="mobile-switch">
+            <input type="checkbox" id="switch-adblock" checked>
+            <span class="mobile-slider"></span>
+          </label>
+        </div>
+
+        <!-- Force Dark Mode -->
+        <div class="sheet-list-item" id="toggle-darkmode-item">
+          <div class="item-left">
+            <div class="item-icon-box">
+              <svg class="icon" style="color: #818cf8;" viewBox="0 0 24 24"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-5.4-5.4c0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z" fill="currentColor"/></svg>
+            </div>
+            <div>
+              <div class="item-title">Zorunlu Karanlık Sayfalar</div>
+              <div class="item-desc">Tüm web sitelerini derin AMOLED siyah yap</div>
+            </div>
+          </div>
+          <label class="mobile-switch">
+            <input type="checkbox" id="switch-darkmode">
+            <span class="mobile-slider"></span>
+          </label>
+        </div>
+
+        <!-- RAM / Battery Saver -->
+        <div class="sheet-list-item" id="toggle-ramsaver-item">
+          <div class="item-left">
+            <div class="item-icon-box">
+              <svg class="icon" style="color: #10b981;" viewBox="0 0 24 24"><path d="M15 4h-1V2h-4v2H9c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-3 12l-2-4h2V8l3 5h-3v3z" fill="currentColor"/></svg>
+            </div>
+            <div>
+              <div class="item-title">RAM & Pil Tasarrufu</div>
+              <div class="item-desc">Boştaki sekmeleri uyutur & şarjı korur</div>
+            </div>
+          </div>
+          <label class="mobile-switch">
+            <input type="checkbox" id="switch-ramsaver" checked>
+            <span class="mobile-slider"></span>
+          </label>
+        </div>
+
+        <!-- Desktop Mode -->
+        <div class="sheet-list-item" id="toggle-desktop-item">
+          <div class="item-left">
+            <div class="item-icon-box">
+              <svg class="icon" style="color: #34d399;" viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z" fill="currentColor"/></svg>
+            </div>
+            <div>
+              <div class="item-title">Masaüstü Sitesi İste</div>
+              <div class="item-desc">Web sayfalarını bilgisayar modunda aç</div>
+            </div>
+          </div>
+          <label class="mobile-switch">
+            <input type="checkbox" id="switch-desktop">
+            <span class="mobile-slider"></span>
+          </label>
+        </div>
+
+        <!-- Auto Cookie Consent Blocker -->
+        <div class="sheet-list-item" id="toggle-cookie-blocker-item">
+          <div class="item-left">
+            <div class="item-icon-box">
+              <svg class="icon" style="color: #f59e0b;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 4a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm-3 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm7 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm1-6a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" fill="currentColor"/></svg>
+            </div>
+            <div>
+              <div class="item-title">Çerez Uyarılarını Kapat</div>
+              <div class="item-desc">Sinir bozucu 'Çerezleri Kabul Et' popuplarını engelle</div>
+            </div>
+          </div>
+          <label class="mobile-switch">
+            <input type="checkbox" id="switch-cookie-blocker" checked>
+            <span class="mobile-slider"></span>
+          </label>
+        </div>
+
+        <!-- Reader Mode Action -->
+        <button class="sheet-action-row" id="btn-menu-reader">
+          <div class="item-icon-box" style="background: rgba(56, 189, 248, 0.15);">
+            <svg class="icon" style="color: #38bdf8;" viewBox="0 0 24 24"><path d="M19 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 16H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V6h12v4z" fill="currentColor"/></svg>
+          </div>
+          <div style="text-align: left;">
+            <div class="item-title">Temiz Okuma Modu</div>
+            <div class="item-desc">Reklamları ve menüleri gizle, kitap gibi oku</div>
+          </div>
+        </button>
+
+        <!-- Asteroid Offline Game Action -->
+        <button class="sheet-action-row" id="btn-menu-game">
+          <div class="item-icon-box" style="background: rgba(168, 85, 247, 0.15);">
+            <svg class="icon" style="color: #c084fc;" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" fill="currentColor"/></svg>
+          </div>
+          <div style="text-align: left;">
+            <div class="item-title">🎮 Siber Göktaşı Avcısı</div>
+            <div class="item-desc">İnternetsiz retro arcade uzay oyunu oyna</div>
+          </div>
+        </button>
+
+        <!-- Text to Speech Action -->
+        <button class="sheet-action-row" id="btn-menu-tts">
+          <div class="item-icon-box" style="background: rgba(245, 158, 11, 0.15);">
+            <svg class="icon" style="color: #f59e0b;" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/></svg>
+          </div>
+          <div style="text-align: left;">
+            <div class="item-title">Sayfayı Sesli Dinle (TTS)</div>
+            <div class="item-desc">Yapay zeka ile makaleyi seslendir</div>
+          </div>
+        </button>
+
+        <!-- QR Scanner Action -->
+        <button class="sheet-action-row" id="btn-menu-qr">
+          <div class="item-icon-box" style="background: rgba(59, 130, 246, 0.15);">
+            <svg class="icon" style="color: #3b82f6;" viewBox="0 0 24 24"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm12 2h2v4h-2v-4zm-2-2h2v2h-2v-2zm4 0h2v2h-2v-2zm-2 4h2v2h-2v-2zM6 6v2h2V6H6zm10 0v2h2V6h-2zM6 16v2h2v-2H6z" fill="currentColor"/></svg>
+          </div>
+          <div style="text-align: left;">
+            <div class="item-title">QR Kod Tara</div>
+            <div class="item-desc">Kamerayla QR kod okutarak siteye git</div>
+          </div>
+        </button>
+
+        <!-- Data Import Action -->
+        <button class="sheet-action-row" id="btn-menu-import">
+          <div class="item-icon-box" style="background: rgba(16, 185, 129, 0.15);">
+            <svg class="icon" style="color: #10b981;" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" fill="currentColor"/></svg>
+          </div>
+          <div style="text-align: left;">
+            <div class="item-title">Veri İçe Aktar (Brave/Chrome)</div>
+            <div class="item-desc">Yer imlerini ve şifreleri aktar</div>
+          </div>
+        </button>
+
+        <!-- Share / PDF Action -->
+        <button class="sheet-action-row" id="btn-menu-share">
+          <div class="item-icon-box" style="background: rgba(168, 85, 247, 0.15);">
+            <svg class="icon" style="color: #c084fc;" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" fill="currentColor"/></svg>
+          </div>
+          <div style="text-align: left;">
+            <div class="item-title">Sayfayı Paylaş / PDF</div>
+            <div class="item-desc">Bağlantıyı veya PDF olarak ilet</div>
+          </div>
+        </button>
+
+        <!-- Purge RAM Action -->
+        <button class="sheet-action-row" id="btn-purge-memory">
+          <div class="item-icon-box" style="background: rgba(168, 85, 247, 0.15);">
+            <svg class="icon" style="color: #c084fc;" viewBox="0 0 24 24"><path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C14.9 14.65 12.96 18.05 11 21z" fill="currentColor"/></svg>
+          </div>
+          <div style="text-align: left;">
+            <div class="item-title" style="color: #c084fc;">Belleği Şimdi Temizle</div>
+            <div class="item-desc" id="purge-status-desc">Önbelleği ve ram çöplerini boşalt</div>
+          </div>
+        </button>
+
+        <!-- Settings Row -->
+        <button class="sheet-action-row" id="btn-open-settings">
+          <div class="item-icon-box">
+            <svg class="icon" style="color: #94a3b8;" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/></svg>
+          </div>
+          <span>Tarayıcı Ayarları Stüdyosu</span>
+          <svg class="icon" style="width: 14px; height: 14px; margin-left: auto; color: #64748b;" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" fill="currentColor"/></svg>
+        </button>
+
+        <!-- Update Row -->
+        <button class="sheet-action-row" id="btn-check-mobile-update">
+          <div class="item-icon-box" style="background: rgba(127, 0, 255, 0.15);">
+            <svg class="icon" style="color: #c084fc;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="currentColor"/></svg>
+          </div>
+          <div style="text-align: left; flex: 1;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span class="item-title">Sürüm & Güncellemeler</span>
+              <span id="mobile-version-badge" style="font-size: 10px; background: rgba(127,0,255,0.25); color: #c084fc; padding: 2px 8px; border-radius: 12px; font-weight: 600;">v1.1.0</span>
+            </div>
+            <div class="item-desc" id="mobile-update-desc">Yeni sürümü kontrol et & güncelle</div>
+          </div>
+        </button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       5. TARAYICI AYARLARI MODALI (Settings Modal)
+       ========================================== -->
+  <div id="settings-sheet-modal" class="hidden">
+    <div class="sheet-modal-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <svg class="icon" style="color: var(--accent-color);" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/></svg>
+        <h3>Ayarlar Stüdyosu</h3>
+      </div>
+      <button id="btn-close-settings-modal" class="btn-text-close">Kapat</button>
+    </div>
+
+    <div class="settings-modal-body">
+      <!-- Section 1: Search Engine -->
+      <div class="settings-group">
+        <div class="settings-group-title">Arama Motoru</div>
+        <div class="settings-option-card">
+          <label class="settings-radio-row">
+            <span>Google</span>
+            <input type="radio" name="mobile-search-engine" value="google" checked>
+          </label>
+          <label class="settings-radio-row">
+            <span>DuckDuckGo (Gizlilik Odaklı)</span>
+            <input type="radio" name="mobile-search-engine" value="duckduckgo">
+          </label>
+          <label class="settings-radio-row">
+            <span>Brave Search (İzleyicisiz)</span>
+            <input type="radio" name="mobile-search-engine" value="brave">
+          </label>
+          <label class="settings-radio-row">
+            <span>Yandex</span>
+            <input type="radio" name="mobile-search-engine" value="yandex">
+          </label>
+          <label class="settings-radio-row">
+            <span>Bing</span>
+            <input type="radio" name="mobile-search-engine" value="bing">
+          </label>
+          <label class="settings-radio-row">
+            <span>Ecosia (Doğa Dostu)</span>
+            <input type="radio" name="mobile-search-engine" value="ecosia">
+          </label>
+        </div>
+      </div>
+
+      <!-- Section 2: Secure DNS -->
+      <div class="settings-group">
+        <div class="settings-group-title">Güvenli DNS (DoH Şifreleme)</div>
+        <div class="settings-option-card">
+          <label class="settings-radio-row">
+            <span>Sistem Varsayılanı (Özel DNS Kapalı)</span>
+            <input type="radio" name="mobile-dns" value="system" checked>
+          </label>
+          <label class="settings-radio-row">
+            <span>Cloudflare (1.1.1.1) - En Hızlı & Gizli</span>
+            <input type="radio" name="mobile-dns" value="cloudflare">
+          </label>
+          <label class="settings-radio-row">
+            <span>AdGuard DNS (Reklam Engelleyici)</span>
+            <input type="radio" name="mobile-dns" value="adguard">
+          </label>
+          <label class="settings-radio-row">
+            <span>Google DNS (8.8.8.8)</span>
+            <input type="radio" name="mobile-dns" value="google">
+          </label>
+          <label class="settings-radio-row">
+            <span>Quad9 (9.9.9.9) - Zararlı Yazılım Koruması</span>
+            <input type="radio" name="mobile-dns" value="quad9">
+          </label>
+        </div>
+      </div>
+
+      <!-- Section 3: Performance & RAM Saver -->
+      <div class="settings-group">
+        <div class="settings-group-title">Performans & Bellek Yönetimi</div>
+        <div class="settings-option-card">
+          <div class="settings-toggle-row">
+            <div>
+              <div class="item-title">Otomatik Sekme Uyutucu</div>
+              <div class="item-desc">5 dk kullanılmayan sekmelerin belleğini serbest bırakır</div>
+            </div>
+            <label class="mobile-switch">
+              <input type="checkbox" id="setting-tab-sleep" checked>
+              <span class="mobile-slider"></span>
+            </label>
+          </div>
+          <div class="settings-toggle-row" style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px;">
+            <div>
+              <div class="item-title">Donanım Hızlandırma</div>
+              <div class="item-desc">GPU ile 60 FPS akıcı video & kaydırma</div>
+            </div>
+            <label class="mobile-switch">
+              <input type="checkbox" id="setting-gpu-accel" checked>
+              <span class="mobile-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Privacy Clear Data -->
+      <div class="settings-group">
+        <div class="settings-group-title">Gizlilik & Bellek Temizleme</div>
+        <div class="settings-option-card">
+          <button class="btn-settings-action" id="btn-clear-all-data">
+            <svg class="icon" style="color: #ef4444;" viewBox="0 0 24 24"><path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z" fill="currentColor"/></svg>
+            <span style="color: #ef4444;">Tarama Geçmişi & Önbelleği Temizle</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Section 5: About -->
+      <div class="settings-group">
+        <div class="settings-group-title">Hakkında</div>
+        <div class="settings-option-card" style="padding: 14px;">
+          <div style="font-size: 13px; font-weight: 700; color: #ffffff;">LowBrowser Mobile Pro</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Sürüm 1.0.6 (Full Feature Edition)</div>
+          <div style="font-size: 11px; color: var(--text-dim); margin-top: 6px;">Geliştirici: billythestudent</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       6. BOOKMARKS & HISTORY MODAL
+       ========================================== -->
+  <div id="list-sheet-modal" class="hidden">
+    <div class="sheet-modal-header">
+      <h3 id="list-modal-title">Geçmiş</h3>
+      <div class="modal-header-actions">
+        <button id="btn-clear-list-modal" class="btn-text-danger">Temizle</button>
+        <button id="btn-close-list-modal" class="btn-text-close">Kapat</button>
+      </div>
+    </div>
+    <div id="list-modal-content"></div>
+  </div>
+
+  <!-- ==========================================
+       7. DOWNLOADS MANAGER MODAL (İndirmeler)
+       ========================================== -->
+  <div id="downloads-sheet-modal" class="hidden">
+    <div class="sheet-modal-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <svg class="icon" style="color: #10b981;" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" fill="currentColor"/></svg>
+        <h3>İndirilenler</h3>
+      </div>
+      <div class="modal-header-actions">
+        <button id="btn-clear-downloads-modal" class="btn-text-danger">Tümünü Temizle</button>
+        <button id="btn-close-downloads-modal" class="btn-text-close">Kapat</button>
+      </div>
+    </div>
+    <div id="downloads-modal-content">
+      <div class="empty-downloads-placeholder">
+        <svg class="icon" style="width: 48px; height: 48px; color: #334155; margin-bottom: 8px;" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" fill="currentColor"/></svg>
+        <div style="font-size: 14px; font-weight: 600; color: var(--text-dim);">Henüz İndirilen Dosya Yok</div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">İndirdiğiniz resimler ve dosyalar burada listelenir.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       8. MOBILE BOTTOM NAVIGATION BAR
+       ========================================== -->
+  <nav id="mobile-bottom-nav">
+    <button id="nav-btn-back" class="nav-icon-btn" disabled title="Geri">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor"/></svg>
+    </button>
+    
+    <button id="nav-btn-forward" class="nav-icon-btn" disabled title="İleri">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor"/></svg>
+    </button>
+
+    <button id="nav-btn-home" class="nav-icon-btn" title="Ana Sayfa">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/></svg>
+    </button>
+
+    <button id="nav-btn-tabs" class="nav-icon-btn tab-counter-btn" title="Sekmeler">
+      <div id="tab-counter-badge">1</div>
+    </button>
+
+    <button id="nav-btn-menu" class="nav-icon-btn" title="Menü">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" fill="currentColor"/></svg>
+    </button>
+  </nav>
+
+  <!-- Pull to Refresh Spinner Indicator -->
+  <div id="mobile-pull-refresh" class="hidden">
+    <svg class="pull-spinner" viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" fill="currentColor"/></svg>
+  </div>
+
+  <!-- Text-to-Speech (TTS) Web Reader Bar -->
+  <div id="tts-player-bar" class="hidden">
+    <div class="tts-left">
+      <span class="tts-icon">🔊</span>
+      <span id="tts-status-text">Sesli Okuyucu Hazır</span>
+    </div>
+    <div class="tts-controls">
+      <button id="btn-tts-play" class="tts-btn" title="Oynat / Duraklat">▶️</button>
+      <button id="btn-tts-stop" class="tts-btn" title="Durdur">⏹️</button>
+      <button id="btn-tts-close" class="tts-btn" title="Kapat">✕</button>
+    </div>
+  </div>
+
+  <!-- QR Code Camera Scanner Modal -->
+  <div id="qr-scanner-modal" class="custom-sheet-modal hidden">
+    <div class="sheet-modal-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 20px;">📷</span>
+        <h3>QR Kod Tarayıcı</h3>
+      </div>
+      <button id="btn-close-qr-modal" class="btn-text-close">Kapat</button>
+    </div>
+    <div class="qr-scanner-body">
+      <video id="qr-video" autoplay playsinline></video>
+      <canvas id="qr-canvas" class="hidden"></canvas>
+      <div class="qr-target-box">
+        <div class="qr-laser"></div>
+      </div>
+      <div id="qr-scan-status">QR kodu kare içine hizalayın...</div>
+    </div>
+  </div>
+
+  <!-- Gizli Sekme Biyometrik / PIN Kilidi Modalı -->
+  <div id="mobile-pin-modal" class="custom-sheet-modal hidden">
+    <div class="pin-modal-card">
+      <span class="pin-lock-icon">🔒</span>
+      <h3>Gizli Sekme Kilidi</h3>
+      <p>Bu gizli sekmeye erişmek için 4 haneli PIN kodunuzu girin.</p>
+      <div class="pin-dots">
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+      </div>
+      <div class="pin-keypad">
+        <button class="pin-key" data-num="1">1</button>
+        <button class="pin-key" data-num="2">2</button>
+        <button class="pin-key" data-num="3">3</button>
+        <button class="pin-key" data-num="4">4</button>
+        <button class="pin-key" data-num="5">5</button>
+        <button class="pin-key" data-num="6">6</button>
+        <button class="pin-key" data-num="7">7</button>
+        <button class="pin-key" data-num="8">8</button>
+        <button class="pin-key" data-num="9">9</button>
+        <button class="pin-key pin-action" id="btn-pin-cancel">İptal</button>
+        <button class="pin-key" data-num="0">0</button>
+        <button class="pin-key pin-action" id="btn-pin-del">⌫</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobil Veri İçe Aktarma Modalı (Brave/Chrome/Edge) -->
+  <div id="mobile-import-modal" class="custom-sheet-modal hidden">
+    <div class="sheet-modal-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 20px;">🌐</span>
+        <h3>Veri İçe Aktar</h3>
+      </div>
+      <button id="btn-close-mobile-import" class="btn-text-close">Kapat</button>
+    </div>
+    <div class="sheet-modal-content" style="padding: 20px;">
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">
+        Brave, Chrome veya Edge tarayıcınızdan dışa aktardığınız <strong>HTML Yer İmleri</strong> veya <strong>CSV Şifre</strong> dosyasını seçerek LowBrowser'a aktarabilirsiniz.
+      </p>
+      <input type="file" id="mobile-import-file-input" accept=".html,.htm,.csv,.json" style="display: none;">
+      <button id="btn-mobile-trigger-file" class="sheet-action-row" style="background: var(--accent-gradient); color: #fff; justify-content: center; font-weight: 700; border-radius: 12px; padding: 14px;">
+        📁 Dosya Seç ve İçe Aktar
+      </button>
+      <div id="mobile-import-status" class="import-status-box hidden" style="margin-top: 14px;"></div>
+    </div>
+  </div>
+
+  <!-- Mobil Otomatik Güncelleme Modalı -->
+  <div id="mobile-update-modal" class="custom-sheet-modal hidden">
+    <div class="sheet-modal-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 20px;">🚀</span>
+        <h3 id="mobile-update-modal-title">Sürüm & Güncelleme</h3>
+      </div>
+      <button id="btn-close-mobile-update" class="btn-text-close">Kapat</button>
+    </div>
+    <div class="sheet-modal-content" style="padding: 20px; text-align: center;">
+      <div style="display: flex; justify-content: center; margin-bottom: 12px;">
+        <img src="logo.png" alt="Logo" style="width: 56px; height: 56px; filter: drop-shadow(0 0 12px rgba(127,0,255,0.4));">
+      </div>
+      <h4 style="font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 4px;">LowBrowser Mobile</h4>
+      <div id="modal-curr-ver" style="display: inline-block; background: rgba(127,0,255,0.2); color: #c084fc; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; margin-bottom: 14px;">
+        Mevcut Sürüm: v1.1.0
+      </div>
+      <p id="modal-update-status" style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;">
+        Güncellemeler GitHub Releases üzerinden denetleniyor...
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button id="btn-modal-check-now" class="sheet-action-row" style="background: var(--accent-gradient); color: #fff; justify-content: center; font-weight: 700; border-radius: 12px; padding: 14px;">
+          🔄 Güncellemeleri Şimdi Denetle
+        </button>
+        <a id="btn-modal-download-apk" class="sheet-action-row hidden" href="https://github.com/billythestudent/lowbrowser/releases/download/mobile-latest/LowBrowser.apk" style="background: #10b981; color: #fff; justify-content: center; font-weight: 700; border-radius: 12px; padding: 14px; text-decoration: none;">
+          ⬇️ Yeni APK'yı Hemen İndir & Güncelle
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Toast Notification -->
+  <div id="mobile-toast" class="hidden"></div>
+
+  <!-- Mobile Undo Tab Snackbar -->
+  <div id="mobile-undo-snackbar" class="hidden">
+    <span id="undo-snackbar-text">Sekme kapatıldı</span>
+    <button id="btn-undo-tab">GERİ AL</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
